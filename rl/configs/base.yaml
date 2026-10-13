@@ -1,0 +1,100 @@
+﻿# --------------------------------------------------------------------------- #
+# Models                                                                       #
+# --------------------------------------------------------------------------- #
+
+segmenter_model: Qwen/Qwen2.5-7B-Instruct
+
+helper_model: Qwen/Qwen2.5-14B-Instruct
+
+# --------------------------------------------------------------------------- #
+# Where to write everything                                                    #
+# --------------------------------------------------------------------------- #
+
+# Per-group isolation lives under {root}/{dataset}/{group_id}/
+rl_workdir_root: .db/rl
+
+# Per-rollout ephemeral memory dirs live under
+# {root}/{dataset}/{group_id}/rollouts/{rollout_id}/ and are wiped at the end of
+# each rollout to avoid cross-rollout pollution.
+rollout_subdir: rollouts
+
+# --------------------------------------------------------------------------- #
+# Phase 1 鈥?No-Memory atomic graphs + per-query baselines                       #
+# --------------------------------------------------------------------------- #
+phase1:
+  atomic_graph_only: true
+  overwrite_existing: false
+  parallel_roles_per_group: 2
+  mas_type: autogen
+  reasoning: io
+
+# --------------------------------------------------------------------------- #
+# Phase 2 鈥?GRPO over the segmenter                                            #
+# --------------------------------------------------------------------------- #
+phase3:
+  topology: dual_gpu
+  group_size_G: 16
+  total_steps: 200
+  batch_size: 8
+  ppo_mini_batch_size: 8
+  ppo_epochs: 1
+  max_prompt_length: 20480
+  max_response_length: 2048
+  temperature: 1.0
+
+  # verl trainer/runtime knobs
+  experiment_name: grpo-segmenter-v5
+  n_gpus_per_node: 1
+  nnodes: 1
+  save_freq: 15
+  max_ckpt_to_keep: 5
+  test_freq: -1
+  val_before_train: false
+
+  use_dynamic_bsz: true
+  ppo_max_token_len_per_gpu: 20480
+
+  # GRPO knobs
+  clip_low: 0.2
+  clip_high: 0.28
+  beta_kl: 0.04
+  target_kl: [0.03, 0.12]
+  dynamic_sampling: false
+
+  top_k: 2
+
+  solver_max_tokens: 128
+  solver_request_timeout: 45
+  solver_max_retries: 1
+  solver_repeated_observation_limit: 4
+  solver_think_step_limit: 8
+
+  reward_v5:
+    token_budget_B: 300
+    lambda_token: 0.03
+    delta: 0.03
+    c: 3
+    rho: 0.3
+
+  # LoRA
+  lora:
+    r: 64
+    alpha: 128
+    dropout: 0.05
+    target_modules: ["q_proj", "k_proj", "v_proj", "o_proj"]
+
+  # Optimizer
+  optimizer:
+    lr: 1.0e-5
+    weight_decay: 0.0
+
+
+  ckpt_dir: ./checkpoints
+
+# --------------------------------------------------------------------------- #
+# Logging                                                                      #
+# --------------------------------------------------------------------------- #
+logging:
+  wandb_project: magfold-segmenter-rl
+  log_every_step: true
+  trainer_logger: ["console"]

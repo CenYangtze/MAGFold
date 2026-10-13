@@ -1,0 +1,17 @@
+# LLABench/LifelongAgentBench env config.
+#
+# Select the benchmark part with:
+#   LLABENCH_ENV=db_bench          # default, full local SQL grading
+#   LLABENCH_ENV=os_interaction    # shell workspace adapter
+#   LLABENCH_ENV=knowledge_graph   # lightweight KG final-answer adapter
+#
+# Data is loaded from HuggingFace with load_dataset(..., data_dir=<sub-env>) and
+# cached under data/llabench/.
+dataset_name: csyq/LifelongAgentBench
+default_sub_env: db_bench
+split: train
+cache_dir: data/llabench
+
+# OS tasks run shell commands in a temp workspace. Absolute mutable benchmark
+# paths such as /var/log/app are mapped under that workspace.
+os_command_timeout: 10

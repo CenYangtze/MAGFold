@@ -1,0 +1,6 @@
+llm_config:
+  max_token: 512
+  temperature: 0.1
+  num_comps: 1
+  request_timeout: 120
+  max_retries: 5

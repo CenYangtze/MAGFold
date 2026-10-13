@@ -1,0 +1,56 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Local configuration and secrets
+.env
+.env.*
+!.env.example
+
+# Local paper files
+/paper/
+
+# Runtime outputs
+.db/
+logs/
+tmp/
+artifacts/
+outputs/
+runs/
+wandb/
+mlruns/
+*.log
+
+# Dataset and model assets
+data/
+datasets/
+models/
+checkpoints/
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+
+# OS and editor files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.code-workspace
+
+# Build artifacts
+build/
+dist/
+*.egg-info/

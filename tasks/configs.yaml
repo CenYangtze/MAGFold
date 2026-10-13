@@ -1,0 +1,82 @@
+# Global runtime defaults.
+memory_folder: ./.db
+embedding_model: sentence-transformers/all-MiniLM-L6-v2
+
+# Supported task configs.
+alfworld:
+  env_config_path: tasks/env_configs/alfworld_config.yaml
+  max_steps: 20
+  few_shots_num: 1
+
+pddl:
+  env_config_path: tasks/env_configs/pddl_config.yaml
+  max_steps: 30
+  few_shots_num: 1
+
+llabench:
+  env_config_path: tasks/env_configs/llabench_config.yaml
+  max_steps: 8
+  few_shots_num: 1
+
+hotpotqa:
+  env_config_path: tasks/env_configs/hotpotqa_config.yaml
+  max_steps: 12
+  few_shots_num: 2
+
+# Supported MAS frameworks.
+autogen:
+  successful_topk: 1
+  failed_topk: 1
+  insights_topk: 3
+  threshold: 0
+  use_projector: false
+
+macnet:
+  graph_type: Random
+  node_num: 3
+  use_critic: false
+  successful_topk: 1
+  failed_topk: 1
+  insights_topk: 3
+  threshold: 0
+  use_projector: false
+
+dylan:
+  node_num: 2
+  round_num: 2
+  learning_rate: 0.01
+  use_critic: false
+  successful_topk: 1
+  failed_topk: 1
+  insights_topk: 3
+  threshold: 0
+  use_projector: false
+
+# G-Memory baseline.
+gmemory:
+  hop: 1
+  start_insights_threshold: 5
+  rounds_per_insights: 5
+  insights_point_num: 5
+
+# MAGFold graph memory and retrieval settings.
+magfold:
+  enabled: true
+  block_top_k: 3
+  task_top_k: 3
+  inspiration_top_k: 2
+  node_top_k_per_block: 5
+  segment_window_size: 3
+  max_memory_tokens: 2000
+  enable_edge_typing: true
+  enable_llm_edge_typer: false
+  enable_llm_block_curator: true
+  enable_llm_block_segmenter: true
+  llm_block_segment_max_retries: 3
+  llm_block_segment_max_tokens: 8192
+  strict_llm_block_segmenter: false
+  enable_llm_block_selector: true
+  full_unfold: false
+  save_atomic_graph: true
+  save_block_graph: true
+  debug: false

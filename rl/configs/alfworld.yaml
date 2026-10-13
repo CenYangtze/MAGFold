@@ -1,0 +1,5 @@
+﻿dataset: alfworld
+groups_dir: data/rl_pairs/alfworld
+
+env_max_steps: 30
+few_shots_num: 1
